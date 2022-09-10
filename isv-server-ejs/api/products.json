@@ -3,25 +3,25 @@
     "id": 1,
     "title": "Lana de Vidrio (m)",
     "price": 450,
-    "thumbnail": "https://isvshop.netlify.app/assets/acustiverR.png"
+    "thumbnail": "https://isvcommerce.netlify.app/assets/acustiverR.png"
   },
   {
     "id": 2,
     "title": "Placa de Lana de Vidrio",
     "price": 450,
-    "thumbnail": "https://isvshop.netlify.app/assets/acustiverP.png"
+    "thumbnail": "https://isvcommerce.netlify.app/assets/acustiverP.png"
   },
   {
     "id": 3,
     "title": "Placa de Yeso (m²)",
     "price": 500,
-    "thumbnail": "https://isvshop.netlify.app/assets/durlock.png"
+    "thumbnail": "https://isvcommerce.netlify.app/assets/durlock.png"
   },
   {
     "id": 4,
     "title": "New Product (test)",
     "price": 100,
-    "thumbnail": "https://isvshop.netlify.app/assets/logoISV.png"
+    "thumbnail": "https://isvcommerce.netlify.app/assets/logoISV.png"
   },
   {
     "id": 5,
@@ -33,6 +33,6 @@
     "id": 7,
     "title": "Another Product (test)",
     "price": 100,
-    "thumbnail": "https://isvshop.netlify.app/assets/logoISV.png"
+    "thumbnail": "https://isvcommerce.netlify.app/assets/logoISV.png"
   }
 ]
