@@ -1,0 +1,19 @@
+{{#if productList}}
+<div class='itemList'>
+    {{#each productList}}
+    <div class='itemCard'>
+        <div class='itemTitle'>
+            <span>{{this.title}}</span>
+        </div>
+        <div class='itemPicture'>
+            <img src={{this.thumbnail}} width='200px' height='200px'  alt={{this.title}}/>
+        </div>
+        <div class='itemDetail'>
+            <p>Price: {{this.price}}</p>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{else}}
+<h2>There are no products!</h2>
+{{/if}}

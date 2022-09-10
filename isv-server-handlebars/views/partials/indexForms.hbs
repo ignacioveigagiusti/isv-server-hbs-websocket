@@ -1,0 +1,43 @@
+<section>
+    <h2>Add a Product</h2>
+    <form action="/" method="POST">
+        <div class="form-group">
+            Name: <input type="text" name="title" class="form-control">
+            Price: <input type="text" name="price" class="form-control">
+            Image URL: <input type="text" name="thumbnail" class="form-control">
+            <button class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</section>
+{{#if successfulAdd}}    
+    <div class="alert alert-success" role="alert">
+        'Product added successfully!'
+    </div>
+{{/if}}
+{{#if unsuccessfulAdd}}    
+    <div class="alert alert-danger" role="alert">
+        'Product could not be added: {{addError}}'
+    </div>
+{{/if}}
+<section>
+    <h2>Edit Existing Product</h2>
+    <form action="/edit" method="POST">
+        <div class="form-group">
+            ID: <input type="text" name="id" class="form-control">
+            Name: <input type="text" name="title" class="form-control">
+            Price: <input type="text" name="price" class="form-control">
+            Image URL: <input type="text" name="thumbnail" class="form-control">
+            <button class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</section>
+{{#if successfulEdit}}    
+    <div class="alert alert-success" role="alert">
+        'Product edited successfully: {{editedProduct}}'
+    </div>
+{{/if}}
+{{#if unsuccessfulEdit}}    
+    <div class="alert alert-danger" role="alert">
+        'Product could not be edited: {{editError}}'
+    </div>
+{{/if}}

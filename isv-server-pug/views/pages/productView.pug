@@ -1,0 +1,29 @@
+html
+  include ../partials/head.pug  
+body
+  include ../partials/header.pug     
+  main(class="container")
+    section
+      if productList && productList.length > 0
+        h2='Products'
+        div(class='itemList')
+          each prod in productList
+            <div class='itemCard'>
+              <div class='itemTitle'>
+                  span=prod.title
+              </div>
+              <div class='itemPicture'>
+                  img(src=prod.thumbnail, width='200px', height='200px', alt=prod.title)
+              </div>
+              <div class='itemDetail'>
+                  p='Price: ' + prod.price
+              </div>
+            </div>
+      else
+        if error
+          h2='There was an error fetching the data!'
+          h3='Detail: '
+          p=error
+        else
+          h2='There are no products!'
+  include ../partials/footer.pug 
