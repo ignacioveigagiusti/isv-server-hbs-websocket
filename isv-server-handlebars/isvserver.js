@@ -1,8 +1,12 @@
 const express = require('express');
 const { Router } = express;
 const fs = require('fs');
+const { Server: IOServer } = require('socket.io');
+const { Server: HttpServer } = require('http');
 
 const app = express();
+const httpServer = new HttpServer(app);
+const io = new IOServer(httpServer);
 
 // This server will use handlebars for templating
 const handlebars = require('express-handlebars');
@@ -35,6 +39,8 @@ const footer = hbs.compile(fs.readFileSync(__dirname + '/views/partials/footer.h
 hbs.registerPartial('footer', footer)
 const indexForms = hbs.compile(fs.readFileSync(__dirname + '/views/partials/indexForms.hbs').toString('utf-8'));
 hbs.registerPartial('indexForms', indexForms)
+const productTable = hbs.compile(fs.readFileSync(__dirname + '/views/partials/productTable.hbs').toString('utf-8'));
+hbs.registerPartial('productTable', productTable)
 app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -45,20 +51,25 @@ app.get('/', (req, res) => {
 })
 
 // Add an item with the index form
-app.post('/', async (req, res) => {
+app.post('/', async (req, res) => {    
     try {
-        if( req.body.title == undefined || req.body.price === null || req.body.thumbnail == undefined || req.body.title == '' || req.body.price === '' || req.body.thumbnail == '' ) {
-            throw 'Missing data. Product needs Title, Price and Thumbnail.'
+        if( req.body.name == undefined || req.body.price === null || req.body.thumbnail == undefined || req.body.category == undefined || req.body.stock == null || req.body.name == '' || req.body.price === '' || req.body.thumbnail == '' || req.body.category == '' || req.body.stock == '' ) {
+            throw 'Missing data. Product needs name, Price, Thumbnail, Category and Stock.'
         }
-        let title = req.body.title;
+        let category = req.body.category;
+        let subcategory = req.body.subcategory || ' ';
+        let name = req.body.name;
+        let description = req.body.description || ' ';
         let price = req.body.price;
+        let stock = req.body.stock;
         let thumbnail = req.body.thumbnail;
         price = parseFloat(price);
-        const newProduct = {title:title, price:price, thumbnail:thumbnail};
+        stock = parseFloat(stock);
+        const newProduct = {category:category, subcategory:subcategory, name:name, description:description, price:price, stock:stock, thumbnail:thumbnail};
         const savedProduct = await productContainer.save(newProduct);
         res.render('main', {addedProduct: JSON.stringify(savedProduct), successfulAdd: true});
     } catch (err) {
-        res.render('main', {unsuccessfulAdd: true, addError: err});
+        res.status(400).send(err);
     }
 })
 
@@ -73,20 +84,46 @@ app.post('/edit', async (req, res) => {
             throw 'No ID was provided';
         }
         const prevProduct = await productContainer.getById(putId);
-        let newTitle = prevProduct.title;
+        let newTimestamp = String(new Date()).slice(0,33);
+        let newCategory = prevProduct.category;
+        let newCat = prevProduct.cat;
+        let newSubcategory = prevProduct.subcategory || '';
+        let newName = prevProduct.name;
+        let newDescription = prevProduct.description || '';
         let newPrice = prevProduct.price;
+        let newStock = prevProduct.stock;
         let newThumbnail = prevProduct.thumbnail;
-        if (typeof req.body.title === 'string' && req.body.title !== '') {
-            newTitle = req.body.title;
+        if (typeof req.body.timestamp === 'string' && req.body.timestamp !== '') {
+            newTimestamp = req.body.timestamp;
         }
-        if (parseFloat(req.body.price) != null && req.body.price !== '') {
+        if (typeof req.body.category === 'string' && req.body.category !== '') {
+            newCategory = req.body.category;
+        }
+        if (typeof req.body.subcategory === 'string' && req.body.subcategory !== '') {
+            newSubcategory = req.body.subcategory;
+        }
+        if (typeof req.body.cat === 'string' && req.body.cat !== '') {
+            newCat = req.body.cat;
+        }
+        if (typeof req.body.name === 'string' && req.body.name !== '') {
+            newName = req.body.name;
+        }
+        if (typeof req.body.description === 'string' && req.body.description !== '') {
+            newDescription = req.body.description;
+        }
+        if (!isNaN(req.body.price) && req.body.price && req.body.price !== '') {
             newPrice = parseFloat(req.body.price);
+        }
+        if (!isNaN(req.body.stock) && req.body.stock && req.body.stock !== '') {
+            newStock = parseInt(req.body.stock);
         }    
         if (typeof req.body.thumbnail === 'string' && req.body.thumbnail !== '') {   
             newThumbnail = req.body.thumbnail;
         }
-        const newProduct = {title:newTitle, price:newPrice, thumbnail:newThumbnail};
-        const editProduct = await productContainer.edit(putId, newProduct);
+        const newProduct = {timestamp:newTimestamp, category:newCategory, subcategory:newSubcategory, name:newName, description:newDescription, price:newPrice, stock:newStock, thumbnail:newThumbnail, cat:newCat};
+        const editProduct = await productContainer.edit(putId, newProduct).catch((err) => {
+            throw err
+        });
         res.render('main', {successfulEdit: true, editedProduct: JSON.stringify(editProduct, null, 2)});
     } catch (err) {
         res.render('main', {unsuccessfulEdit: true, editError: err});
@@ -183,7 +220,41 @@ app.use('/api/products', productRouter);
 
 //Connection
 const PORT = 8080;
-const server = app.listen(PORT, () => {
-    console.log(`Servidor inicializado en el puerto ${server.address().port}`)
+httpServer.listen(PORT, () => {
+    console.log(`Servidor inicializado en el puerto ${httpServer.address().port}`)
 });
-server.on("error", err => console.log(`Error en el servidor: ${err}`));
+httpServer.on("error", err => console.log(`Error en el servidor: ${err}`));
+
+io.on('connection', async (socket) => {
+    console.log('Client connected');
+    const messages = JSON.parse(await fs.promises.readFile('./api/messages.json', 'utf8'));
+    try {
+        socket.emit('messages', messages);
+    } catch (err) {
+        io.sockets.emit('msgError', err.message);
+    }
+    let products;
+    try {
+        products = await productContainer.getAll();
+        socket.emit('products', products);
+    } catch (err) {
+        io.sockets.emit('prodError', err.message);
+    }
+    socket.on('newMessage', async data => {
+        try {
+            messages.push(data);
+            await fs.promises.writeFile('./api/messages.json', JSON.stringify(messages,null,2));
+            io.sockets.emit('messages', messages);    
+        } catch (err) {
+            io.sockets.emit('msgError', err.message);
+        }
+    });
+    socket.on('productEvent', async () => {
+        try {
+            products = await productContainer.getAll();
+            io.sockets.emit('products', products);
+        } catch (err) {
+            io.sockets.emit('prodError', err.message);
+        }
+    });
+})

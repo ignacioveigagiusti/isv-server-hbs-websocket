@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 {{> head }}
+<script src="/main.js" defer></script>
 <body>
     {{> header }}
     <main class="container">
-        {{> indexForms }}                                 
+        {{> indexForms }}
+        {{> productTable }}  
+        <div class='chatContainer'>
+            <div class='collapse mb-3' id='chatWidget'>
+                    <h2>Messages</h2>
+                    <div id='messages'></div>
+                    <form onsubmit="return addMessage(event)">
+                            <input class="form-control" type="text" id="userEmail" placeholder="Email">
+                            <input class="form-control" type="text" id="userMessage" placeholder="Your message">
+                            <div id='msgAlertWrapper'>
+                                <div>id='msgAlert'</div>
+                            </div>
+                            <input class="btn btn-primary" type="submit" value="Send">
+                    </form>
+            </div>
+            <button class="btn btn-info chatToggleBtn" type="button" data-toggle="collapse" data-target="#chatWidget" aria-expanded="false" aria-controls="chatWidget">Chat</button>
+        </div> 
     </main>
     {{> footer }}
 </body>
+
 </html>

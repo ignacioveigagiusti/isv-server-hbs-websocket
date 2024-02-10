@@ -1,43 +1,45 @@
-<section>
-    <h2>Add a Product</h2>
-    <form action="/" method="POST">
-        <div class="form-group">
-            Name: <input type="text" name="title" class="form-control">
-            Price: <input type="text" name="price" class="form-control">
-            Image URL: <input type="text" name="thumbnail" class="form-control">
-            <button class="btn btn-primary">Send</button>
+<article class='row'>
+    <section class='col'>
+        <h2>Add a Product</h2>
+        <form onsubmit="addProduct(event)">
+            <div class="form-group">
+                <div> Category: <input type="text" name="category" id="addCategory" class="form-control"></div>
+                <div> Subcategory: <input type="text" name="subcategory" id="addSubcategory" class="form-control"></div>
+                <div> Name: <input type="text" name="title" id="addTitle" class="form-control"></div>
+                <div> Description: <input type="text" name="description" id="addDescription" class="form-control"></div>
+                <div> Price: <input type="number" name="price" id="addPrice" class="form-control"></div>
+                <div> Stock: <input type="number" name="stock" id="addStock" class="form-control"></div>
+                <div> Image URL: <input type="text" name="thumbnail" id="addThumbnail" class="form-control"></div>
+                <button class="btn btn-primary" onclick="(e) => {e.preventDefault()}">Send</button>
+            </div>
+        </form>
+        <div id="successfulAddWrapper">
+            <div class="alert alert-success", id="successfulAdd" ,role="alert"> Product added successfully!</div>
         </div>
-    </form>
-</section>
-{{#if successfulAdd}}    
-    <div class="alert alert-success" role="alert">
-        'Product added successfully!'
-    </div>
-{{/if}}
-{{#if unsuccessfulAdd}}    
-    <div class="alert alert-danger" role="alert">
-        'Product could not be added: {{addError}}'
-    </div>
-{{/if}}
-<section>
-    <h2>Edit Existing Product</h2>
-    <form action="/edit" method="POST">
-        <div class="form-group">
-            ID: <input type="text" name="id" class="form-control">
-            Name: <input type="text" name="title" class="form-control">
-            Price: <input type="text" name="price" class="form-control">
-            Image URL: <input type="text" name="thumbnail" class="form-control">
-            <button class="btn btn-primary">Send</button>
+        <div id="unsuccessfulAddWrapper">
+            <div class="alert alert-danger", id="unsuccessfulAdd" ,role="alert"> Product could not be added</div>
+        </div>    
+    </section>
+    <section class='col'>
+        <h2>Edit Existing Product</h2>
+        <form onsubmit="editProduct(event)">
+            <div class="form-group">
+                <div> ID: <input type="text" name="id" id="editId" class="form-control"></div>
+                <div> Category: <input type="text" name="category" id="editCategory" class="form-control"></div>
+                <div> Subcategory: <input type="text" name="subcategory" id="editSubcategory" class="form-control"></div>
+                <div> Name: <input type="text" name="title" id="editTitle" class="form-control"></div>
+                <div> Description: <input type="text" name="description" id="editDescription" class="form-control"></div>
+                <div> Price: <input type="number" name="price" id="editPrice" class="form-control"></div>
+                <div> Stock: <input type="number" name="stock" id="editStock" class="form-control"></div>
+                <div> Image URL: <input type="text" name="thumbnail" id="editThumbnail" class="form-control"></div>
+                <button class="btn btn-primary" onclick="(e) => {e.preventDefault()}">Send</button>
+            </div>
+        </form>
+        <div id="successfulEditWrapper">
+            <div class="alert alert-success", id="successfulEdit" ,role="alert"> Product edited successfully!</div>
         </div>
-    </form>
-</section>
-{{#if successfulEdit}}    
-    <div class="alert alert-success" role="alert">
-        'Product edited successfully: {{editedProduct}}'
-    </div>
-{{/if}}
-{{#if unsuccessfulEdit}}    
-    <div class="alert alert-danger" role="alert">
-        'Product could not be edited: {{editError}}'
-    </div>
-{{/if}}
+        <div id="unsuccessfulEditWrapper">
+            <div class="alert alert-danger", id="unsuccessfulEdit" ,role="alert"> Product could not be edited.</div>
+        </div>
+    </section>
+</article>

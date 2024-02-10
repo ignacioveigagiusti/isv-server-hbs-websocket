@@ -71,3 +71,64 @@ section{
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
 }
+
+#successfulAddWrapper{
+    transition:max-height 0.5s ease-out;
+    max-height:0;
+    overflow:hidden;
+}
+
+#unsuccessfulAddWrapper{
+    transition:max-height 0.5s ease-out;
+    max-height:0;
+    overflow:hidden;
+}
+
+#successfulEditWrapper{
+    transition:max-height 0.5s ease-out;
+    max-height:0;
+    overflow:hidden;
+}
+
+#unsuccessfulEditWrapper{
+    transition:max-height 0.5s ease-out;
+    max-height:0;
+    overflow:hidden;
+}
+
+#msgAlertWrapper{
+    transition:max-height 0.5s ease-out;
+    max-height:0;
+    overflow:hidden;
+    color: crimson;
+}
+
+.chatContainer{
+    max-width: 500px;
+    max-height: inherit;
+    position: fixed;
+    left: auto;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#chatWidget{
+    border-radius: 10px;
+    border-bottom-right-radius: 0;
+    background-color: floralwhite;
+    padding: 10px;
+    border-style: solid;
+    border-color: antiquewhite;
+}
+
+#messages span {
+    color: brown;
+}
+
+.chatToggleBtn{
+    width: fit-content;
+    box-shadow: 2px 2px 5px grey;
+}

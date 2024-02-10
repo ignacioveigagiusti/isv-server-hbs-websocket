@@ -1,0 +1,17 @@
+[
+  {
+    "author": "user_1@xmail.com",
+    "timestamp": "Thu Apr 14 2022 00:10:38 GMT-0300",
+    "text": "Hi!"
+  },
+  {
+    "author": "evil_server@xmail.com",
+    "timestamp": "Thu Apr 14 2022 00:10:53 GMT-0300",
+    "text": "Goodbye!"
+  },
+  {
+    "author": "user_1@xmail.com",
+    "timestamp": "Thu Apr 14 2022 00:11:09 GMT-0300",
+    "text": "Oh, okay, see you!"
+  }
+]
